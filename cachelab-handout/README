@@ -1,0 +1,4 @@
+This is cache simulator lab in which we tried to simulate how a cpu cache of arbitrary size for blocks, lines, etc would work.
+
+csim.c contains the cache simulator file.
+trans.c contains a matrix transpose function that is as cache-efficient as possible.
