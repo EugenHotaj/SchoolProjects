@@ -1,0 +1,1 @@
+A memory allocation simulator my parter and I developed for Computer Systems Organizations. It uses explicit linked lists to keep track of free/used bocks of memory and constantly coalesces free blocks together whenever any memory is freed. It is pretty efficeint working at about 95% efficiency of what the gcc malloc runs at.
