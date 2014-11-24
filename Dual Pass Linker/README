@@ -1,0 +1,24 @@
+ComSci0202
+Lab1 - Linker Lab
+September 16, 2014
+
+Instructions for how to run:
+
+To compile:
+javac *.java
+
+To run:
+java Main [arg0]
+Where [arg0] is the name of the input file.
+The web input files have been included (named input1 - input9) for your convenience.
+
+No limit is placed on symbol length.
+
+The Files:
+Main.c contains the two pass linker.
+MetaData contains data that the linker needs to keep track of.
+
+Extra Credit was not attempted.
+
+Eugen Hotaj
+

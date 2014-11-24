@@ -1,0 +1,13 @@
+To Compile: javac Main.java
+To Run: java Main [flag] [inputfile]
+
+[flag]: --verbose if you would like verbose output (java Main --verbose input1)
+[inputfile]: the argument for the input file containing the processes (java Main input1 => no verbose)
+
+NOTE: the online input files have been included for convenience (input1...input7)
+
+WARNING: the "random-numbers" file must be included in the directory since it is hardcoded.
+	 Alternativley if a new random numbers file is provide it must be in the same directory
+	 under the same format and must be called "random-numbers" or the program will generate
+	 a null pointer exception.
+

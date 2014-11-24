@@ -1,0 +1,14 @@
+to compile:
+   make
+
+to run:
+   ./main [input file]
+
+note the input files from the web have been included for convenience
+
+arbitrary limits:
+	  total number of instructions per task = 25
+	  total number of tasks = 10
+	  total number of resources = 10
+
+Eugen Hotaj
