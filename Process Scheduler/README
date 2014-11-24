@@ -1,3 +1,10 @@
+Implementation of 4 different scheduling algorithms:
+(1) First Come First Serve
+(2) Round Robin - with a quantum of 2 cycles - FCFS for preemption/blocking
+(3) Uniprogrammed - 1 process at a time regardless if the process is blocked or not, otherwise FCFS
+(4) Shortest Job First - FCFS for blocking
+
+
 To Compile: javac Main.java
 To Run: java Main [flag] [inputfile]
 
