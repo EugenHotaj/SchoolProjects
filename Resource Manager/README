@@ -2,8 +2,7 @@ Implementation of two different resource managers:
 (1)An optimistic manager which grants all resources a process asks for in a FIFO manner. 
 If deadlock occurs the algorithm chooses the next process in the queue to abort. 
 
-(2)An implementaiton of Dijkstra's Banker algorithm. The manager only grants resources to a process only if
-granting these resources will lead to a safe state, in this way completley avoiding deadlock. 
+(2)An implementaiton of Dijkstra's Banker algorithm. The manager only grants resources to a process only if granting these resources will lead to a safe state, in this way completley avoiding deadlock. 
 
 to compile:
    make
