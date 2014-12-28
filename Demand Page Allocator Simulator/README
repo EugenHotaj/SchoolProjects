@@ -1,0 +1,38 @@
+to compile: 
+   javac Main.java
+
+to run:
+   java Main [M] [P] [S] [J] [N] [R]
+   	 M = machine size in words            (> 0)
+         P = page size in words               (> 0) 
+         S = process size in words	      (> 0)
+         J = job mix                          (1-4) 
+         N = number of references per process (> 0)
+         R = replacement algorithm            (fifo lru random)
+
+notes:
+   (1) Debug with chioces of random numbers is available 
+       	     -> choice of random not shown for random frame replacement 
+       	     -> to enable set "DEBUG = true" in Main.java
+   (2) "The random-numbers" file is hardcoded and must be present in the directory  
+   	     
+sample input: 
+    (1) 10 10 20 1 10 lru
+    (2) 10 10 10 1 100 lru
+    (3) 10 10 10 2 10 lru
+    (4) 20 10 10 2 10 lru
+    (5) 20 10 10 2 10 random
+    (6) 20 10 10 2 10 fifo
+    (7) 20 10 10 3 10 lru
+    (8) 20 10 10 3 10 fifo
+    (9) 20 10 10 4 10 lru
+   (10) 20 10 10 4 10 random
+   (11) 90 10 40 4 100 lru
+   (12) 40 10 90 1 100 lru
+   (13) 40 10 90 1 100 fifo
+   (14) 800 40 400 4 5000 lru
+   (15) 10 5 30 4 3 random
+   (16) 1000 40 400 4 5000 fifo
+	
+	
+	
