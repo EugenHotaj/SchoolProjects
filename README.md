@@ -1,2 +1,2 @@
 # SchoolProjects
-Programs written in C and Java for different courses at NYU.
+Programs and circuits written for different classes at NYU.
