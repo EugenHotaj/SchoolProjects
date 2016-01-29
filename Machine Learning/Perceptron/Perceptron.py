@@ -12,10 +12,17 @@ for i in range (0,5000):
 
 ### Build Dictionary ###
 dictionary = {};
+default_class = 0;
 
 for i in range (0,len(train_set)):
     current_string = train_set[i].split();
     current_word_set = {};
+    
+    if(int(current_string[0]) == 1):
+        default_class += 1
+    else:
+        default_class -= 1;
+        
     for j in range (1,len(current_string)):
         word = current_string[j];
         if(word not in current_word_set):
@@ -24,6 +31,8 @@ for i in range (0,len(train_set)):
             else:
                 dictionary[word] = 1;
             current_word_set[word] = True;
+
+default_class = int(default_class/1000);
 
 dictionary = {key:value for key, value in dictionary.items()
               if value >= 30};
@@ -40,11 +49,12 @@ validate_vectors = [];
 def transform_to_vector(string):
     v = [0] * len(dictionary);
     current_string = string.split();
-    for i in range(0,len(current_string)):
+    spam = int(current_string[0]);
+    for i in range(1,len(current_string)):
         word = current_string[i];
         if(word in dictionary):
             v[dictionary[word]] = 1;
-    return v;
+    return ({'spam' : spam,'v' : v});
 
 for i in range(0,len(train_set)):
     train_vectors.append(transform_to_vector(train_set[i]));
@@ -52,5 +62,28 @@ for i in range(0,len(train_set)):
 for i in range(0, len(validate_set)):
     validate_vectors.append(transform_to_vector(validate_set[i]));
 
+### Perceptron Functions ###
 
-input();
+def perceptron_train(data):
+    w = [0] * len(dictionary);
+    k = 0;
+    it = 0;
+
+    while(true):
+        flag = False;
+        
+        for i in range(0,len(data)):
+            current_vector = data[i]['v'];
+            current_spam = 1 if data[i]['spam'] == 1 else -1;
+
+                        
+
+        if(!flag)
+            break;
+    
+    return(w,k,it);
+
+
+
+def perceptron_test(w,data):
+    return;
