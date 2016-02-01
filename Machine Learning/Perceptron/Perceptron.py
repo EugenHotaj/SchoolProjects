@@ -33,8 +33,15 @@ for i in range (0,len(train_set)):
             else:
                 dictionary[word] = 1;
             current_word_set[word] = True;
-
-default_class = int(default_class/1000);
+            
+for i in range (0,len(validate_set)):
+    current_string = train_set[i].split();
+    if(int(current_string[0]) == 1):
+        default_class += 1;
+    else:
+        default_class -= 1;
+        
+default_class = 1 if default_class > 0 else -1;
 
 dictionary = {key:value for key, value in dictionary.items()
               if value >= 30};
@@ -71,23 +78,37 @@ def perceptron_train(data):
     k = 0;
     it = 0;
 
-    while(true):
+    while(True):
         flag = False;
-        
+        currentK = 0;  
+        w_old = list(w);
         for i in range(0,len(data)):
             current_vector = data[i]['v'];
             current_spam = 1 if data[i]['spam'] == 1 else -1;
-
-
-        if(not flag):
+            
+            dot = np.dot(current_vector, w);
+            if(dot == 0): 
+                dot = default_class; 
+            else: 
+                dot = 1 if dot > 0 else -1;
+                
+            if(dot != current_spam):
+                currentK += 1;                
+                k += 1;
+                flag = True;
+                w = np.add(w,np.multiply(current_spam,current_vector));       
+        
+        it += 1;
+        
+        print(currentK,it);
+        if(not flag or np.array_equal(w_old,w)):
             break;
     
+    print(w,k,it);
     return(w,k,it);
 
-
+perceptron_train(train_vectors);
 
 def perceptron_test(w,data):
     
     return;
-
-input();
