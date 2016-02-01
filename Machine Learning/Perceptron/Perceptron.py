@@ -1,3 +1,5 @@
+import numpy as np;
+
 train_file = open("spam_train.txt");
 
 ### Split up training data ###
@@ -76,9 +78,8 @@ def perceptron_train(data):
             current_vector = data[i]['v'];
             current_spam = 1 if data[i]['spam'] == 1 else -1;
 
-                        
 
-        if(!flag)
+        if(not flag):
             break;
     
     return(w,k,it);
@@ -86,4 +87,7 @@ def perceptron_train(data):
 
 
 def perceptron_test(w,data):
+    
     return;
+
+input();
