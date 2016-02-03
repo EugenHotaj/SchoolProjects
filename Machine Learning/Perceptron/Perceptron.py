@@ -240,4 +240,5 @@ def perceptron_train_avereged(data, max_it):
 #plt.title("Both Perceptron");
 #plt.scatter(np.array(plt_it)[:,0],np.array(plt_it)[:,1]);
 
+### Question 10 ###
 
