@@ -177,80 +177,67 @@ def perceptron_train_avereged(data, max_it):
     
     return(np.divide(w_total,it*len(data)),k,it);
 
-### Question 7 & 8 ###
-def train_on_set(data,N):
-    p_n = perceptron_train(data[0:N],0);    
-    p_a = perceptron_train_avereged(data[0:N],0);
-    
-    e_n = perceptron_test(p_n[0],validate_vectors);
-    e_a = perceptron_test(p_a[0],validate_vectors);
-    
-    return ((e_n,p_n[1]),(e_a,p_a[1]));
-
-plt_err_n = [];
-plt_err_a = [];
-
-plt_it_n = [];
-plt_it_a = [];
-
-data = train_on_set(train_vectors,100);
-plt_err_n.append([100,data[0][0]]);
-plt_err_a.append([100,data[1][0]]);
-plt_it_n.append([100,data[0][1]]);
-plt_it_n.append([100,data[1][1]]);
-
-data = train_on_set(train_vectors,200);
-plt_err_n.append([200,data[0][0]]);
-plt_err_a.append([200,data[1][0]]);
-plt_it_n.append([200,data[0][1]]);
-plt_it_n.append([200,data[1][1]]);
-
-data = train_on_set(train_vectors,400);
-plt_err_n.append([400,data[0][0]]);
-plt_err_a.append([400,data[1][0]]);
-plt_it_n.append([400,data[0][1]]);
-plt_it_n.append([400,data[1][1]]);
-
-data = train_on_set(train_vectors,800);
-plt_err_n.append([800,data[0][0]]);
-plt_err_a.append([800,data[1][0]]);
-plt_it_n.append([800,data[0][1]]);
-plt_it_n.append([800,data[1][1]]);
-
-data = train_on_set(train_vectors,2000);
-plt_err_n.append([2000,data[0][0]]);
-plt_err_a.append([2000,data[1][0]]);
-plt_it_n.append([2000,data[0][1]]);
-plt_it_n.append([2000,data[1][1]]);
-
-data = train_on_set(train_vectors,4000);
-plt_err_n.append([4000,data[0][0]]);
-plt_err_a.append([4000,data[1][0]]);
-plt_it_n.append([4000,data[0][1]]);
-plt_it_n.append([4000,data[1][1]]);
-
-plt.figure(1);
-plt.xlabel("Size of Training Set");
-plt.ylabel("Error Rate");
-plt.title("Normal Perceptron");
-plt.scatter(np.array(plt_err_n)[:,0],np.array(plt_err_n)[:,1]);
-
-plt.figure(2);
-plt.xlabel("Size of Training Set");
-plt.ylabel("Error Rate");
-plt.title("Avereged Perceptron");
-plt.scatter(np.array(plt_err_a)[:,0],np.array(plt_err_a)[:,1]);
-
-plt.figure(3);
-plt.xlabel("Size of Training Set");
-plt.ylabel("Epochs");
-plt.title("Normal Perceptron");
-plt.scatter(np.array(plt_err_n)[:,0],np.array(plt_err_n)[:,1]);
-
-plot.figure(4);
-plt.xlabel("Size of Training Set");
-plt.ylabel("Epochs");
-plt.title("Avereged Perceptron")
-plt.scatter(np.array(plt_err_n)[:,0],np.array(plt_err_n)[:,1]);
+#### Question 7 & 8 ###
+#def train_on_set(data,N):
+#    p_n = perceptron_train(data[0:N],0);    
+#    p_a = perceptron_train_avereged(data[0:N],0);
+#    
+#    e_n = perceptron_test(p_n[0],validate_vectors);
+#    e_a = perceptron_test(p_a[0],validate_vectors);
+#    
+#    return ((e_n,p_n[2]),(e_a,p_a[2]));
+#
+#plt_err_n = [];
+#plt_err_a = [];
+#
+#plt_it = [];
+#
+#data = train_on_set(train_vectors,100);
+#plt_err_n.append([100,data[0][0]]);
+#plt_err_a.append([100,data[1][0]]);
+#plt_it.append([100,data[0][1]]);
+#
+#data = train_on_set(train_vectors,200);
+#plt_err_n.append([200,data[0][0]]);
+#plt_err_a.append([200,data[1][0]]);
+#plt_it.append([200,data[0][1]]);
+#
+#data = train_on_set(train_vectors,400);
+#plt_err_n.append([400,data[0][0]]);
+#plt_err_a.append([400,data[1][0]]);
+#plt_it.append([400,data[0][1]]);
+#
+#data = train_on_set(train_vectors,800);
+#plt_err_n.append([800,data[0][0]]);
+#plt_err_a.append([800,data[1][0]]);
+#plt_it.append([800,data[0][1]]);
+#
+#data = train_on_set(train_vectors,2000);
+#plt_err_n.append([2000,data[0][0]]);
+#plt_err_a.append([2000,data[1][0]]);
+#plt_it.append([2000,data[0][1]]);
+#
+#data = train_on_set(train_vectors,4000);
+#plt_err_n.append([4000,data[0][0]]);
+#plt_err_a.append([4000,data[1][0]]);
+#plt_it.append([4000,data[0][1]]);
+#
+#plt.figure(1);
+#plt.xlabel("Size of Training Set");
+#plt.ylabel("Error Rate");
+#plt.title("Normal Perceptron");
+#plt.scatter(np.array(plt_err_n)[:,0],np.array(plt_err_n)[:,1]);
+#
+#plt.figure(2);
+#plt.xlabel("Size of Training Set");
+#plt.ylabel("Error Rate");
+#plt.title("Avereged Perceptron");
+#plt.scatter(np.array(plt_err_a)[:,0],np.array(plt_err_a)[:,1]);
+#
+#plt.figure(3);
+#plt.xlabel("Size of Training Set");
+#plt.ylabel("Epochs");
+#plt.title("Both Perceptron");
+#plt.scatter(np.array(plt_it)[:,0],np.array(plt_it)[:,1]);
 
 
