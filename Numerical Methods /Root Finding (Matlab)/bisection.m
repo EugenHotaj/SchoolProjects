@@ -21,7 +21,7 @@ function[r,it] = bisection(f,a,b,eps)
         return;
     end;
     
-    while(abs(a-b)>eps),
+    while(a~=b && abs(a-b)>eps),
         it = it + 1;
         mid = (a+b)/2;
         fmid = f(mid);

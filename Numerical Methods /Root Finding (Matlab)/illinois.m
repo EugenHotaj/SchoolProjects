@@ -1,14 +1,8 @@
 function[r,it] = illinois(f, a, b, eps)
     
-    % check bad input
-    if(a == b)
-        fprintf('Bad Input: x0 == x1');
-        return; 
-    end;
-    
+    it=0;
     fa = f(a);
     fb = f(b);
-    it = 0;
     
     % check roots
     if(abs(fa) <= eps)
@@ -21,14 +15,14 @@ function[r,it] = illinois(f, a, b, eps)
         return;
     end;
     
-    % check secant not horizontal
-    if(fa == fb)
-        fprintf('Bad Input: f(x0) == f(x1)');
-        return;
+    % check bad input
+    if(fb*fa>0)
+        fprintf('Bad Input: f(b),f(a) same sign');
+        return; 
     end;
     
     mu = 1;
-    while(abs(fb) > eps && fb ~= 0 && fa ~= fb)
+    while(a~=b && abs(fb) > eps && fb ~= 0 && fa ~= fb)
        it = it+1;
        
        % Illinois step
