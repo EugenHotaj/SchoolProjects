@@ -7,7 +7,7 @@ from sklearn.multiclass import OneVsRestClassifier;
 
 ### Read in data and create feature vectors ###
 train_file = open("mnist_train.txt");
-test_file = open("mnist_train.txt");
+test_file = open("mnist_test.txt");
 
 train_num = 2000;
 test_num = 1000;
@@ -117,6 +117,15 @@ y = clf.predict(test_set_x);
 print((test_num-np.sum(np.equal(y,test_set_y)))/test_num);
 
 ### Question 2e ###
-print(1-np.mean(cvs(SVC(),train_set_x,y=train_set_y,cv=10)));
+print(1-np.mean(cvs(OneVsRestClassifier(SVC()),train_set_x,y=train_set_y,cv=10)));
 
 ### Question 2f ###
+print(1-np.mean(cvs(OneVsRestClassifier(SVC()),train_set_x,y=train_set_y,cv=10)));
+print(1-np.mean(cvs(OneVsRestClassifier(SVC(gamma=1/len(train_set)**2,C=100)),train_set_x,y=train_set_y,cv=10)));
+print(1-np.mean(cvs(OneVsRestClassifier(SVC(gamma=1/len(train_set)**2,C=1)),train_set_x,y=train_set_y,cv=10)));
+print(1-np.mean(cvs(OneVsRestClassifier(SVC(gamma=0,C=.0001)),train_set_x,y=train_set_y,cv=10)));
+print(1-np.mean(cvs(OneVsRestClassifier(SVC(C=1.5)),train_set_x,y=train_set_y,cv=10)));
+print(1-np.mean(cvs(OneVsRestClassifier(SVC(C=10000)),train_set_x,y=train_set_y,cv=10)));
+print(1-np.mean(cvs(OneVsRestClassifier(SVC(gamma=.001, C=1)),train_set_x,y=train_set_y,cv=10)));
+print(1-np.mean(cvs(OneVsRestClassifier(SVC(gamma=0.01, C=1000)),train_set_x,y=train_set_y,cv=10)));
+print(1-np.mean(cvs(OneVsRestClassifier(SVC(gamma=1/len(train_set),C=100)),train_set_x,y=train_set_y,cv=10)));
