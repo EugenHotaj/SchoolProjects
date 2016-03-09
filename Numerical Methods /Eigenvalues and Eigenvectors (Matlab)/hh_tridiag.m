@@ -1,4 +1,4 @@
-function[T] = hh_tridiag(A)
+function T = hh_tridiag(A)
 
 [m, n] = size(A);
 

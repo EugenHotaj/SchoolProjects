@@ -14,14 +14,13 @@ function[L] = sturm(A)
         L(i) = l;
     end
     
-    
-    % recursion to calculate actual eigenvalues
+    % calculate smalles eigenvalues
     function[l0] = findLeast(a,b)
         b0 = b;
         pb = p(b);
         
         while(pb > 1)
-            b0 = (a+b)/2;
+            b0 = (a+b0)/2;
             pb = p(b0);
         end
         
