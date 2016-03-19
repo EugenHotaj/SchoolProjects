@@ -1,0 +1,43 @@
+README FILE
+
+TO RUN:
+Select test case by changing the first line starting with "load".  Valid tests are test1, test2, test3, or test4.
+Select the strategy by setting the line starting with "strategy = " to 'bfs' for breadth first search, or 'ran' for random.
+Both need some time to run so please be patient!
+
+
+March 2016:
+This folder contains the preliminary matlab programs
+for solving the path planning algorithm question in Homework 2.
+Please study them and use them as the basis for your solution.
+You are free to modify them in anyway you like.
+
+As discussed in lecture today, there are some missing elements
+required for the homework:
+	(1) Union-Find Data structure
+	(2) Maintaining adjacency of boxes
+		(only needed for FREE/MIXED boxes)
+	(3) Search Strategies
+	(4) Final Path planning
+
+
+NOTES:
+In hw2, we ask you to represent boxes as a pair of points.
+	Please ignore that suggestion, and treat boxes just as you
+	would treat any polygon.  Recall that we said that
+	a polygon with n vertices should be represented 
+	as two vectors X, Y of the length n.  This is the format
+	that the "patch" method requires.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+--Chee Yap and Marcelo Cicconet
+Robotics Class, Spring 2016
+Mar 8, 2016
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+Ryan Cavanaugh: For this portion of the homework I updated the main.m file 
+to label boxes free or stuck as it searched and properly label small boxes
+gray. I also implemented the random subdivision search by creating a method
+which chooses a mixed box at random to take from the queue (however as of 
+this writing the method hangs during some call before the search is complete)
