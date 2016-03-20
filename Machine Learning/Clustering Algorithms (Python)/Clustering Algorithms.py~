@@ -1,0 +1,199 @@
+
+# coding: utf-8
+
+# In[1]:
+
+def randIndex(truth, predicted):
+    """
+    The function is to measure similarity between two label assignments
+    truth: ground truth labels for the dataset (1 x 1496)
+    predicted: predicted labels (1 x 1496)
+    """
+    if len(truth) != len(predicted):
+        print("different sizes of the label assignments");
+        return -1;
+    elif (len(truth) == 1):
+        return 1;
+    sizeLabel = len(truth);
+    agree_same = 0;
+    disagree_same = 0;
+    count = 0;
+    for i in range(sizeLabel-1):
+        for j in range(i+1,sizeLabel):
+            if ((truth[i] == truth[j]) and (predicted[i] == predicted[j])):
+                agree_same += 1;
+            elif ((truth[i] != truth[j]) and (predicted[i] != predicted[j])):
+                disagree_same +=1;
+            count += 1;
+            
+    return (agree_same+disagree_same)/float(count);
+
+
+# In[2]:
+
+import scipy.cluster.hierarchy as sch
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.cluster import KMeans
+
+# Question 1
+# parse data
+feature_file = open("dataDescriptions.txt");
+feature_names = np.array(feature_file.readline().split("^"));
+feature_names = feature_names[1:];
+
+files = np.array([]);
+grains_file = open("dataCereal-grains-pasta.txt");
+vegetables_file  = open("dataVegetables.txt");
+fats_file = open("dataFats-oils.txt");
+fish_file = open("dataFinfish-shellfish.txt");
+files = np.append(files, [grains_file, vegetables_file, fats_file, fish_file]);
+
+feature_matrix = np.array([]).reshape(0,len(feature_names));
+names = np.array([]);
+ground_truth = np.array([]);
+lbl = -1;
+
+size_dict = {};
+
+for file in files:
+    lbl += 1;
+    i = 0;
+    for curr_line in file:
+        i += 1;
+        feat = np.array(curr_line.split("^"));
+        names = np.append(names,feat[0]);
+        ground_truth = np.append(ground_truth,lbl);
+        feature_matrix = np.vstack((feature_matrix,feat[1:-1].astype(np.float64)));
+    size_dict[lbl] = i;
+        
+# normalize
+amax = np.array([]);
+amin = np.array([]);
+size = feature_matrix.shape;
+
+for i in range(size[1]):
+    amax = np.append(amax,np.amax(feature_matrix[:,i]));
+    amin = np.append(amin,np.amin(feature_matrix[:,i]));
+
+for i in range(size[0]):
+    for j in range(size[1]):
+        if(amax[j]-amin[j]>0):
+            feature_matrix[i,j] = (feature_matrix[i,j] - amin[j])/(amax[j]-amin[j]);
+
+
+# In[ ]:
+
+# Question 2
+clf = KMeans(n_clusters=4);
+clf.fit(feature_matrix);
+
+
+# In[ ]:
+
+# Question 3
+perm = np.copy(ground_truth);
+np.random.shuffle(perm);
+print(randIndex(ground_truth, perm));
+
+pred = clf.predict(feature_matrix);
+print(randIndex(ground_truth, pred));
+
+
+# In[ ]:
+
+# Question 4
+J = np.array([]);
+clf = KMeans(n_clusters=4,n_init=1,init='random');
+for i in range(20):
+    clf.fit(feature_matrix);
+    pred = clf.predict(feature_matrix);
+    ri = randIndex(ground_truth, pred);
+    J = np.append(J , {'obj' : clf.inertia_, 'ri' : ri});
+print(J);
+
+
+# In[ ]:
+
+# Quesiton 5
+s_feats = np.array([]).reshape(0,len(feature_names));
+s_names = np.array([]);
+count = 0;
+for i in range(4):
+    a = np.copy(feature_matrix[count:count+size_dict[i]]);
+    b = np.copy(names[count:count+size_dict[i]]);
+    count += size_dict[i];
+    
+    s = np.random.get_state();
+    np.random.shuffle(a);
+    np.random.set_state(s);
+    np.random.shuffle(b);
+    s_feats = np.vstack((s_feats,a[:30]));
+    s_names = np.append(s_names, b[:30]);
+    
+fig = plt.figure();
+data = s_feats;
+datalable = s_names;
+hClsMat = sch.linkage(data, method='complete'); # Complete clustering
+sch.dendrogram(hClsMat, labels=datalable, leaf_rotation=90);
+fig.savefig("dendo_rand");
+
+
+# In[3]:
+
+# Question 6
+data = feature_matrix;
+datalable = names;
+hClsMat = sch.linkage(data, method='complete');
+resultingClusters = sch.fcluster(hClsMat,t=3.8, criterion = 'distance');
+print(randIndex(ground_truth,resultingClusters));
+
+
+# In[6]:
+
+results = np.array([]).reshape(0,3);
+for i in np.arange(.1,3.8,.1):
+    resultingClusters = sch.fcluster(hClsMat,t=i,criterion='distance');
+    clusters = len(np.unique(resultingClusters));
+    ri = randIndex(ground_truth,resultingClusters);
+    results = np.vstack((results,np.array([i,clusters,ri])));
+print(results);
+
+
+# In[36]:
+
+# Quesiton 7
+grains_matrix = feature_matrix[0:size_dict[0]];
+grains_names = names[0:size_dict[0]];
+
+clusters = [5, 10, 25, 50 ,75]
+max_names = {};
+for i in range(len(clusters)):
+    clf = KMeans(n_clusters=clusters[i]);
+    clf.fit(grains_matrix);
+    sizes = np.array([]);
+    for j in range(clusters[i]):
+        sizes = np.append(sizes, np.sum(clf.labels_==j))
+    max_label_size = np.amax(sizes);
+    max_label_index = np.where(sizes == max_label_size);
+    max_clust_names = np.array([]);
+    for j in range(len(clf.labels_)):
+        if(clf.labels_[j] == max_label_index):
+            max_clust_names = np.append(max_clust_names,grains_names[j]);
+    if(max_label_size<10):
+        max_names[clusters[i]] = {"size" : max_label_size, "items" : max_clust_names};
+    else:
+        np.random.shuffle(max_clust_names);
+        max_names[clusters[i]] = {"size" : max_label_size, "items" : max_clust_names[:10]};
+print(max_names);
+
+
+# In[34]:
+
+
+
+
+# In[ ]:
+
+
+
