@@ -1,0 +1,20 @@
+April 11, 2016
+Robotic Motion Planning, Spring 2016 - Homework 3
+Group Members (NYU Id):
+	Eugen Hotaj (esh322)
+	Evan Johnson (esj254)
+	Ryan Cavanaugh (rc2442)
+This is the collaborative work of all the named group members. 
+Electronically Signed: Eugen Hotaj, Evan Johnson, Ryan Cavanaugh.
+
+No other sources has been consulted besides the Wikipedia for Hough Transform.
+
+Refer to code files for explanations on what the code does. 
+Output images can found in code/output.
+Input images can be found in code/input (included for convenience). 
+
+To Run
+	Kalman Filer Part - kf_setup, kf_test
+	Line Detection Part - findlines('<path to image>') % arbitrary lines
+	                    - findlineshv('<path to image>') % straight lines
+
