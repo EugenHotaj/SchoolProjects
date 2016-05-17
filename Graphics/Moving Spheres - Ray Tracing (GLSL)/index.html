@@ -1,0 +1,93 @@
+<script src=lib1.js></script>
+
+<body bgcolor=white>
+	
+	<h2>Assignment 2 - Moving Spheres</h2>	
+	
+	<center>
+		<td><canvas id='canvas1' width=400 height=400></canvas></td>
+	</center>
+</body>
+
+<script id='my_vertex_shader' type='x-shader/x-vertex'>
+	attribute vec3 aPosition;
+	varying   vec3 vPosition;
+	void main() {
+		gl_Position = vec4(aPosition, 1.0);
+		vPosition = aPosition;
+	}
+</script>
+
+<script id='my_fragment_shader' type='x-shader/x-fragment'>
+	precision mediump float;
+	uniform float uTime;
+	uniform vec3  uCursor;
+	varying vec3  vPosition;
+	
+	vec4 sphere;
+
+	// COMPUTE INTERSECTION OF A RAY WITH A SPHERE, IF ANY.  RETURN t.
+	// IF THERE IS NO INTERSECTION, RETURN 10000.
+
+	float raySphere(vec3 V, vec3 W, vec4 sph) {
+		float a, b, c;
+		
+		vec3 D = V - sph.xyz;
+		
+		a = 1.;
+		b = 2. * dot(W,D); 
+		c = dot(D,D) - (sph.w*sph.w);
+		
+		float discriminant = b*b - 4.*a*c;
+		if(discriminant < 0.){
+			return 10000.;
+		}
+		
+		return (-b - sqrt(discriminant))/2.;
+
+	}
+
+	// FOR NOW, WE WILL JUST SHADE THE SPHERE BY USING THE SURFACE NORMAL.
+	//    vec3 point IS THE x,y,z POSITION OF THE SURFACE POINT.
+	//    vec4 sphere IS THE x,y,z,r DEFINITION OF THE SPHERE.
+
+	vec3 shadeSphere(vec3 point, vec4 sphere) {
+		vec3 normal = (point - sphere.xyz) / sphere.w;
+		return normal;
+	}
+
+	void main(void) {
+
+		vec3 V, W;
+
+		V = vec3(0.,0.,0.);
+		W = normalize(vec3(vPosition.x, vPosition.y, -3.));
+	
+		vec4 spheres[4];
+		spheres[0] = vec4(-1.7*sin(uTime*10.),0.,-6.+cos(uTime*10.),.1);
+		spheres[1] = vec4(.2*sin(uTime) + .7*cos(uTime),.2,4.2*sin(uTime)-4.7,.15);
+		spheres[2] = vec4(-.1,-.2*sin(uTime),-.45,.15);
+		spheres[3] = vec4(1.,1.,-8.+8.*sin(uTime*.5),1.);
+		
+		vec3 color = vec3(0., 0., .1); // BACKGROUND COLOR
+		
+		float mint = 10000.;
+		
+		for(int i = 0; i < 4; i++){
+			float t = raySphere(V, W, spheres[i]);
+			if(t>0.&&t<mint){
+				mint = t;
+				color = shadeSphere(V + mint * W, spheres[i]);
+				color = sqrt(color); // DO GAMMA CORRECTION.
+			}
+		}
+
+		gl_FragColor = vec4(color, 1.);        // SET OPACITY TO 1.
+	}
+</script>
+
+<script>
+	start_gl('canvas1', document.getElementById('my_vertex_shader'  ).innerHTML,
+	document.getElementById('my_fragment_shader').innerHTML);
+</script>
+

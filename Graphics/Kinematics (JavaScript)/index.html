@@ -1,0 +1,276 @@
+<h2>Assignment 7 - Flock of Birds</h2>
+<center>
+<table>
+<tr>
+<td>
+<center>
+<canvas id=canvas1 width=500 height=500></canvas>
+<p>
+</br>
+<i>Into the sunset.</i>
+
+</center>
+</td>
+</tr>
+</table>
+<p>
+</center>
+<p>
+
+<script src=utility.js></script>
+<script src=drawlib1.js></script>
+<script src=matrix.js></script>
+
+<script>
+   var canvas;
+
+   var matrix = new Matrix();
+
+   var pt0 = new Vector3(-1, 0, 0);
+   var pt1 = new Vector3( 1, 0, 0);
+   var tmp = new Vector3( 0, 0, 0);
+
+   var pix0 = new Vector3(0, 0, 0);
+   var pix1 = new Vector3(0, 0, 0);
+
+   function moveTo(x, y, z) {
+      pt0.set(x, y, z);
+      matrix.transform(pt0, tmp);
+      tmp.viewportTransform(width, height, pix0);
+      g.moveTo(pix0.x, pix0.y);
+   }
+
+   function lineTo(x, y, z) {
+      pt0.set(x, y, z);
+      matrix.transform(pt0, tmp);
+      tmp.viewportTransform(width, height, pix0);
+      g.lineTo(pix0.x, pix0.y);
+   }
+
+   var g;
+   var width;
+   var height;
+
+   canvas = initCanvas('canvas1');
+   canvas.update = function(_g) {
+      g = _g;
+      width = canvas.width;
+      height = canvas.height;
+
+
+		// sun
+		var sun = g.createRadialGradient(width/2,height/2,150,width/2,width/2,250);
+		
+		sun.addColorStop(0,"yellow");
+		sun.addColorStop(1,"red");
+		g.fillStyle = sun;
+		g.fillRect(0,0,width,height);
+		
+		//water
+		var water = [];
+		
+		for(var i =0; i<100; i++){
+			water.push(350+10*(1 + Math.sin((i+time*10)/10)));	
+		}
+
+		g.fillStyle="blue";
+		g.beginPath();
+		g.moveTo(0,350);
+		for(var i = 0; i < water.length; i++){
+			g.lineTo(i*5.5,water[i]);
+		
+		}
+		g.lineTo(530,500);
+		g.lineTo(0,500);
+		g.closePath();
+		g.fill();
+
+      // OUTLINE AROUND CANVAS
+
+      g.lineWidth = 2;
+      g.strokeStyle = 'black';
+      g.beginPath();
+      g.moveTo(0, 0);
+      g.lineTo(width, 0);
+      g.lineTo(width, height);
+      g.lineTo(0, height);
+      g.lineTo(0, 0);
+      g.stroke();
+
+for (var side = -1 ; side <= 1 ; side += 2) {
+      var angle1 =  .3 + .7 * Math.cos(3 * time);
+      var angle2 = -.5 + .5 * Math.sin(3 * time);
+
+      matrix.identity();
+		matrix.translate(0,.3-time*.03<0?0:.3-time*.03,0);
+		matrix.scale(.2-time*.02 < 0 ? .001 : .2-time*.02);
+
+      g.lineJoin = 'round';
+      g.lineCap = 'round';
+      g.beginPath();
+
+      moveTo( 0, 0, 0);
+
+      matrix.rotateZ(angle1 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      matrix.rotateZ(angle2 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      g.lineWidth = 5;
+      g.strokeStyle = 'black';
+      g.stroke();
+}
+
+for (var side = -1 ; side <= 1 ; side += 2) {
+      var angle1 =  .3 + .7 * Math.cos(3 * time);
+      var angle2 = -.5 + .5 * Math.sin(3 * time);
+
+      matrix.identity();
+		matrix.translate(-.2+time*.02>0?0:-.2+time*.02,.1-time*.01<0?0:.1-time*.01,0);
+		matrix.scale(.2-time*.02 < 0 ? .001 : .2-time*.02);
+
+      g.lineJoin = 'round';
+      g.lineCap = 'round';
+      g.beginPath();
+
+      moveTo( 0, 0, 0);
+
+      matrix.rotateZ(angle1 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      matrix.rotateZ(angle2 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      g.lineWidth = 5;
+      g.strokeStyle = 'black';
+      g.stroke();
+   }
+
+for (var side = -1 ; side <= 1 ; side += 2) {
+      var angle1 =  .3 + .7 * Math.cos(3 * time);
+      var angle2 = -.5 + .5 * Math.sin(3 * time);
+
+      matrix.identity();
+		matrix.translate(.2-time*.02<0?0:.2-time*.02,.1-time*.01<0?0:.1-time*.01,0);
+		matrix.scale(.2-time*.02 < 0 ? .001 : .2-time*.02);
+
+      g.lineJoin = 'round';
+      g.lineCap = 'round';
+      g.beginPath();
+
+      moveTo( 0, 0, 0);
+
+      matrix.rotateZ(angle1 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      matrix.rotateZ(angle2 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      g.lineWidth = 5;
+      g.strokeStyle = 'black';
+      g.stroke();
+	}
+
+for (var side = -1 ; side <= 1 ; side += 2) {
+      var angle1 =  .3 + .7 * Math.cos(3 * time);
+      var angle2 = -.5 + .5 * Math.sin(3 * time);
+
+      matrix.identity();
+		matrix.translate(-.4+time*.04>0?0:-.4+time*.04,-.1+time*.01>0?0:-.1+time*.01,0);
+		matrix.scale(.2-time*.02 < 0 ? .001 : .2-time*.02);
+
+      g.lineJoin = 'round';
+      g.lineCap = 'round';
+      g.beginPath();
+
+      moveTo( 0, 0, 0);
+
+      matrix.rotateZ(angle1 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      matrix.rotateZ(angle2 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      g.lineWidth = 5;
+      g.strokeStyle = 'black';
+      g.stroke();
+	}
+
+for (var side = -1 ; side <= 1 ; side += 2) {
+      var angle1 =  .3 + .7 * Math.cos(3 * time);
+      var angle2 = -.5 + .5 * Math.sin(3 * time);
+
+      matrix.identity();
+		matrix.translate(0,-.1+time*.01>0?0:-.1+time*.01,0);
+		matrix.scale(.2-time*.02 < 0 ? .001 : .2-time*.02);
+
+      g.lineJoin = 'round';
+      g.lineCap = 'round';
+      g.beginPath();
+
+      moveTo( 0, 0, 0);
+
+      matrix.rotateZ(angle1 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      matrix.rotateZ(angle2 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      g.lineWidth = 5;
+      g.strokeStyle = 'black';
+      g.stroke();
+	}
+
+for (var side = -1 ; side <= 1 ; side += 2) {
+      var angle1 =  .3 + .7 * Math.cos(3 * time);
+      var angle2 = -.5 + .5 * Math.sin(3 * time);
+
+      matrix.identity();
+		matrix.translate(.4-time*.04<0?0:.4-time*.04,-.1+time*.01>0?0:-.1+time*.01,0);
+		matrix.scale(.2-time*.02<.001?.001:.2-time*.02);
+
+      g.lineJoin = 'round';
+      g.lineCap = 'round';
+      g.beginPath();
+
+      moveTo( 0, 0, 0);
+
+      matrix.rotateZ(angle1 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      matrix.rotateZ(angle2 * side);
+      matrix.translate( .4 * side, 0, 0);
+
+      lineTo( 0, 0, 0);
+
+      g.lineWidth = 5;
+      g.strokeStyle = 'black';
+      g.stroke();
+	}
+}
+
+</script>
+
