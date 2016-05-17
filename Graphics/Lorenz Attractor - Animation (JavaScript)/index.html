@@ -1,0 +1,154 @@
+<h2>Assignment 5 - Lorenz Attractor</h2>
+
+<center>
+	<h3> Click each graph. </h3>
+	<canvas id=canvas1 width=600 height=600></canvas>	
+	</br>
+	Y-Z View
+	
+	</br>
+	<canvas id=canvas2 width=600 height=600></canvas>	
+	</br>
+	X-Z View
+
+	</br>
+	<canvas id=canvas3 width=600 height=600></canvas>	
+	</br>
+	X-Y View
+</center>
+
+<script src=drawlib1.js></script>
+<script>
+	var lorenz = function(v){
+		var row = 28;
+		var sigma = 10;
+		var beta = 8/3;
+		var h = .01;
+
+		var dx = sigma*(v.y - v.x);
+		var dy = v.x*(row - v.z) - v.y;
+		var dz = v.x*v.y - beta*v.z;
+		
+		return new Vector3(h*dx, h*dy, h*dz);
+	}
+	
+	var v0_1 = new Vector3(1,1,1);
+	var v0_2 = new Vector3(1,1,1);
+	var v0_3 = new Vector3(1,1,1);
+	var lorenz_pts_1 = [];
+	var lorenz_pts_2 = [];
+	var lorenz_pts_3 = [];
+	var index_1 = 0;
+	var index_2 = 0;
+	var index_3 = 0;
+	var total = 20000;
+
+	for(var i =0; i<total; i++){
+		lorenz_pts_1.push(v0_1);
+		lorenz_pts_2.push(v0_1);
+		lorenz_pts_3.push(v0_1);
+		var v1 = lorenz(v0_1);
+		v0_1 = new Vector3(v0_1.x + v1.x, v0_1.y + v1.y, v0_1.z + v1.z); 
+		index_1 += 1;
+		index_2 += 1;
+		index_3 += 1;
+	}
+
+	var canvas;
+  	canvas = initCanvas('canvas1');
+	canvas.update = function(g) {
+
+		if(this.cursor.z){
+			lorenz_pts_1 = [];
+			index_1 = 0;
+			v0_1 = new Vector3(1,1,1);
+			return;
+		}
+
+		// update lorenz animation		  
+		if(index_1 < total){
+			for(var i =0; i<15 && index_1 < total; i++){
+				lorenz_pts_1.push(v0_1);
+				var v1 = lorenz(v0_1);
+				v0_1 = new Vector3(v0_1.x + v1.x, v0_1.y + v1.y, v0_1.z + v1.z); 
+				index_1 += 1;
+			}
+		}
+
+		g.strokeStyle = '#814374'
+		g.beginPath();
+		g.moveTo(canvas.width/2 + 10*lorenz_pts_1[0].y, canvas.height/2 + 10*lorenz_pts_1[0].z);
+		for(var i =1; i < lorenz_pts_1.length; i++){
+			if(i< 100) continue;
+
+			var pt = lorenz_pts_1[i];
+			g.lineTo(canvas.width/2 + 10*pt.y, canvas.height/2 + 10*pt.z-270);
+		}
+		g.stroke();
+	}
+
+	canvas = initCanvas('canvas2');
+	canvas.update = function(g) {
+		
+		if(this.cursor.z){
+			lorenz_pts_2 = [];
+			index_2 = 0;
+			v0_2 = new Vector3(1,1,1);
+			return;
+		}
+
+		// update lorenz animation		  
+		if(index_2 < total){
+			for(var i =0; i<15 && index_2 < total; i++){
+				lorenz_pts_2.push(v0_2);
+				var v1 = lorenz(v0_2);
+				v0_2 = new Vector3(v0_2.x + v1.x, v0_2.y + v1.y, v0_2.z + v1.z); 
+				index_2 += 1;
+			}
+		}
+
+		g.strokeStyle = '#B7695C'
+		g.beginPath();
+		g.moveTo(canvas.width/2 + 10*lorenz_pts_2[0].x, canvas.height/2 + 10*lorenz_pts_2[0].z);
+		for(var i =1; i < lorenz_pts_2.length; i++){
+			if(i< 100) continue;
+
+			var pt = lorenz_pts_2[i];
+			g.lineTo(canvas.width/2 + 10*pt.x, canvas.height/2 + 10*pt.z-270);
+		}
+		g.stroke();
+	}
+
+	canvas = initCanvas('canvas3');
+	canvas.update = function(g) {
+		
+		if(this.cursor.z){
+			lorenz_pts_3 = [];
+			index_3 = 0;
+			v0_3 = new Vector3(1,1,1);
+			return;
+		}
+
+		// update lorenz animation		  
+		if(index_3 < total){
+			for(var i =0; i<15 && index_3 < total; i++){
+				lorenz_pts_3.push(v0_3);
+				var v1 = lorenz(v0_3);
+				v0_3 = new Vector3(v0_3.x + v1.x, v0_3.y + v1.y, v0_3.z + v1.z); 
+				index_3 += 1;
+			}
+		}	  
+
+		g.strokeStyle = '#CDBB79'
+		g.beginPath();
+		g.moveTo(canvas.width/2 + 10*lorenz_pts_3[0].x, canvas.height/2 + 10*lorenz_pts_3[0].y);
+		for(var i =1; i < lorenz_pts_3.length; i++){
+			if(i< 100) continue;
+
+			var pt = lorenz_pts_3[i];
+
+			g.lineTo(canvas.width/2 + 10*pt.x, canvas.height/2 + 10*pt.y);
+		}
+		g.stroke();
+	}
+</script>

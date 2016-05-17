@@ -1,0 +1,70 @@
+<!! THIS WAS THE index.html THAT WE ENDED UP WITH BY THE END OF CLASS
+    EXCEPT THAT I HAVE ADDED SOME COMMENTS TO THE FRAG SHADER CODE.>
+
+<script src=lib1.js></script>
+
+<body bgcolor=white>
+<h2>Assingment 2 - Rythic Color</h2>
+<center>
+<canvas id='canvas1' width='480' height='480'>
+</canvas>
+</center>
+</body>
+
+
+<!!=================================================================
+   VERTEX SHADER: runs once per triangle vertex.
+------------------------------------------------------------------->
+
+<script id='vs' type='other'>
+   attribute vec3 aPosition;
+   varying   vec3 vPosition;
+   void main() {
+      gl_Position = vec4(aPosition, 1.0);
+      vPosition = aPosition;
+   }
+</script>
+
+
+<!!=================================================================
+    FRAGMENT SHADER: runs once per pixel fragment.
+
+   Your assignment is to write your own interesting version of the
+   fragment shader program.  Try to have fun with it -- use "uTime"
+   to create animated patterns, and "uCursor" to make it responsive
+   to a user's mouse gestures.
+
+   DO NOT just hand in a variation of what I did in class!  I expect
+   you to create something original.  
+.------------------------------------------------------------------>
+
+<script id='fs' type='other'>
+   precision mediump float;
+   uniform float uTime;
+   uniform vec3  uCursor;
+   varying vec3  vPosition; 
+   
+   void main() {
+           
+      float r = sin(sin(uTime)*sin(uTime))/.5;
+      float rt = .0125 + r/30.;
+     
+      float x = vPosition.x;
+      float y = vPosition.y;
+      
+      float d = sqrt(x*x+y*y);
+      
+      if(d<r+rt && d>r-rt)
+    gl_FragColor = vec4(.5 + sin(x),.5 + sin(y), .5 + sin(x+y),1.);
+      else if (d < r-rt)
+		   gl_FragColor = vec4(cos(x)-.1, cos(y)-.2, cos(x+y), 1.);
+		     else
+		   gl_FragColor = vec4(r,r,r,1.);
+		   
+   }
+</script>
+
+
+<script>
+start_gl("canvas1", getStringFromScript('vs'), getStringFromScript('fs'));
+</script>

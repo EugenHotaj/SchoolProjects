@@ -1,0 +1,318 @@
+<h2>
+Assignment 6 - Firework Cannon
+<h2>
+
+<center>
+<table>
+<tr>
+<td>
+<center>
+<canvas id=canvas1 width=800 height=800></canvas>
+<p>
+
+<i>Just Shooing Some Fireworks.</i>
+
+</center>
+</td>
+</tr>
+</table>
+<p>
+</center>
+<p>
+
+<script src=utility.js></script>
+<script src=drawlib1.js></script>
+<script src=matrix.js></script>
+
+<script>
+   var canvas;
+
+	// creates a rectangle centered at x,y, with side length 2r
+	function Rectangle(x, y, r){
+		this.x = 0;
+		this.y = 0;
+		this.r = 1;
+		this.set(x,y,r);
+	}
+	Rectangle.prototype = {
+		set : function(x,y,r){
+			if(x !== undefined) this.x = x;
+			if(y !== undefined) this.y = y;
+			if(r !== undefined) this.r = r;
+			
+			this.center = new Vector3(x,y,0);
+			
+			var dx = Math.random() < .5 ? -1*Math.random() : Math.random();
+			var dy = Math.random() < .5 ? -1*Math.random() : Math.random();
+			
+			var n = Math.sqrt(dx*dx + dy*dy);
+
+			this.dx = (18*Math.random()+2)*dx/n;
+			this.dy = (18*Math.random()+2)*dy/n;
+
+			bl = new Vector3(x-r,y+r,0);
+			br = new Vector3(x+r,y+r,0);
+			tr = new Vector3(x+r,y-r,0);
+			tl = new Vector3(x-r,y-r,0);
+
+			this.verts = [];
+			this.verts.push(bl);
+			this.verts.push(br);
+			this.verts.push(tr);
+			this.verts.push(tl);
+				
+			this.color = getRandomColor();
+			this.timer = 0;
+			this.alive = 1;
+		},
+
+		setColor : function(s){
+			this.color = s;
+		},
+
+		update : function(){
+			if(this.timer > 85){
+				this.alive = false;
+				return;
+			}
+
+			this.x += this.dx;
+			this.y += this.dy;
+			
+			this.center = new Vector3(this.x, this.y, 0);
+			
+			for(var i = 0; i < this.verts.length; i++){
+				var v = this.verts[i];
+				v.x += this.dx;
+				v.y += this.dy;
+			}
+
+			this.dx /= 1.15;
+			this.dy /= 1.15;
+
+			this.timer++;
+		},
+
+		transform : function(matrix){
+			for(var i = 0; i < this.verts.length; i++){
+				var p = this.verts[i];	
+				p.sub(this.center);
+				matrix.transform(p,p);
+				p.add(this.center);
+				this.verts[i] = p;
+			}
+		},
+
+		draw : function(g){
+			g.strokeStyle = this.color;
+			g.fillStyle = this.color;
+			g.moveTo(this.verts[0].x, this.verts[0].g);
+			g.beginPath();
+			this.verts.forEach(function(p){
+				g.lineTo(p.x, p.y);
+			});
+			g.closePath();
+			g.fill();
+		},
+	}
+
+	function Bullet(x,y,dx,dy){
+		this.set(x,y,dx,dy);
+	}
+	Bullet.prototype = {
+		set : function(x,y,dx,dy){
+			this.x = x;
+			this.y = y;
+			this.dx = dx;
+			this.dy = dy;
+
+			this.alive = true;
+			this.explode = false;
+
+			this.range = 100*Math.random() + 100;
+		},
+
+		draw : function(g){
+			this.x += this.dx;
+			this.y += this.dy;
+			
+			if(this.x < -10 || this.x > 810 || this.y < -10 || this.y > 810){
+				this.alive = false;
+			}
+
+			if(this.y < this.range){
+				this.alive = false;
+				this.explode = true;
+			}
+
+			g.fillStyle="yellow";
+			g.beginPath();
+			g.arc(this.x,this.y,2,0,2*Math.PI);
+			g.fill();		
+		}
+	}
+
+	function getRandomColor() {
+		var letters = '0123456789ABCDEF'.split('');
+		var color = '#';
+		for(var i = 0; i < 6; i++ ) {
+			color += letters[Math.floor(Math.random() * 16)];
+		}
+		return color;
+	}
+
+   // BELOW IS THE CODE WE WROTE ON THURSDAY TO TEST THE MATRIX CLASS.
+   // YOU NEED TO FINISH IMPLEMENTING THE MATRIX CLASS, AND THEN
+   // CREATE AN ANIMATED GRAPHICAL SCENE TO DEMONSTRATE YOUR WORK.
+   // YOU SHOULD USE BOTH THE time AND this.cursor VARIABLES.
+
+   var matrix = new Matrix();
+
+   matrix.identity();
+
+	matrix.rotateZ(0.8);
+	matrix.scale(0.965,.965,.965);
+
+   /////////////////////////////////////////////////////////////////////
+
+	var rects = [];
+	var bullets = [];
+	
+	var fire = function(x,y,dx,dy){ 
+		bullets.push(new Bullet(x, y, dx, dy));
+	}
+
+	var explode = function(x,y){
+		for(var i =0; i < 200; i++){
+			rects.push(new Rectangle(x,y,3));
+		}
+	}
+
+	var stars = [];
+	for(var i =0; i < 30; i++){
+		var s = new Vector3(
+			800*Math.random(), 
+			550*Math.random(), 
+			0);
+		stars.push(s);	
+	}
+
+	var hill = [];
+	hill.push(new Vector3(0, 655, 0));
+	hill.push(new Vector3(50, 645, 0));
+	hill.push(new Vector3(100, 635, 0));
+	hill.push(new Vector3(150, 625, 0));
+	hill.push(new Vector3(200, 615, 0));
+	hill.push(new Vector3(250, 612, 0));
+	hill.push(new Vector3(300, 624, 0));
+	hill.push(new Vector3(350, 633, 0));
+	hill.push(new Vector3(400, 649, 0));
+	hill.push(new Vector3(450, 650, 0));
+	hill.push(new Vector3(500, 649, 0));
+	hill.push(new Vector3(550, 650, 0));
+	hill.push(new Vector3(600, 655, 0));
+	hill.push(new Vector3(650, 662, 0));
+	hill.push(new Vector3(700, 665, 0));
+	hill.push(new Vector3(750, 668, 0));
+	hill.push(new Vector3(800, 672, 0));
+  	hill.push(new Vector3(800, 800, 0));
+	hill.push(new Vector3(0,800,0));
+	
+	var cannonCenter = new Vector3(250,612,0);
+	var normal = new Vector3(0,-1); 
+	
+	var prev = 0;
+	var curr = 0;
+
+	canvas = initCanvas('canvas1');
+   canvas.update = function(g) {
+
+      var x = this.cursor.x,
+          y = this.cursor.y;
+		
+		prev = curr;
+		curr = this.cursor.z;
+
+		// draw background
+		g.fillStyle = '#00224c';
+		g.fillRect(0,0,canvas.width,canvas.height);
+	
+		// draw stars
+		for(var i = 0; i < stars.length; i++){
+			g.fillStyle = 'yellow';
+			g.fillRect(stars[i].x, stars[i].y, 2, 2);	
+		}
+
+		// draw moon
+		g. moveTo(100,200);
+		g.fillStyle = "#e6e6fa";
+		g.beginPath();
+		g.arc(100,200,50,0,2*Math.PI);
+		g.fill();
+
+		// draw hill
+		g.fillStyle = "#8b8c62";
+		g.moveTo(hill[0].x, hill[0].y);
+		g.beginPath();
+		for(var i =0; i < hill.length; i++){
+			g.lineTo(hill[i].x, hill[i].y);	
+		}
+		g.closePath();
+		g.fill();
+
+		// draw cannon 
+		var cannonDir = new Vector3(x - cannonCenter.x, y-cannonCenter.y, 0);
+		var cdn = Math.sqrt(cannonDir.x*cannonDir.x + cannonDir.y*cannonDir.y);
+		var cannonDir = new Vector3(cannonDir.x/cdn, cannonDir.y/cdn);
+		
+		var angle = cannonDir.x*normal.x + cannonDir.y*normal.y;
+		if(angle <= .25){
+			cannonDir.y = -.25;
+			cdn = Math.sqrt(cannonDir.x*cannonDir.x + cannonDir.y*cannonDir.y);
+			var cannonDir = new Vector3(cannonDir.x/cdn, cannonDir.y/cdn);
+		}
+
+		if(curr && prev!=curr){
+			fire(cannonCenter.x + 30*cannonDir.x, cannonCenter.y + 30*cannonDir.y, 10*cannonDir.x, 10*cannonDir.y);
+		}
+
+		// draw bullets
+
+		for(var i =0; i < bullets.length; i++){
+			var b = bullets[i];
+			if(!b.alive){
+				bullets.splice(i,1);
+				i--;
+				if(b.explode){
+					explode(b.x,b.y);
+				}
+				continue;
+			}
+			bullets[i].draw(g);
+		}
+
+		g.lineCap="round";
+		g.strokeStyle="black";
+		g.lineWidth=10;
+		g.moveTo(cannonCenter.x, cannonCenter.y);
+		g.beginPath();
+		g.lineTo(cannonCenter.x, cannonCenter.y);
+		g.lineTo(cannonCenter.x + cannonDir.x*50, cannonCenter.y + cannonDir.y*50);
+		g.stroke();
+		g.lineCap="butt";
+
+
+		// draw fireworks
+		for(var i = 0; i < rects.length; i++){
+			var r = rects[i];
+			if(!r.alive){
+				rects.splice(i,1);
+				i--;
+				continue;
+			}
+			r.update();
+			r.transform(matrix);
+			r.draw(g);
+		}
+	}
+</script>
